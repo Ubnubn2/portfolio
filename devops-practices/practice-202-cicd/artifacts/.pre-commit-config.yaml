@@ -1,0 +1,37 @@
+repos:
+  # Базовые проверки файлов
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+        name: Проверка YAML-файлов
+      - id: check-json
+        name: Проверка JSON-файлов
+      - id: end-of-file-fixer
+        name: Перенос строки в конце файла
+      - id: trailing-whitespace
+        name: Удаление лишних пробелов
+
+  # Линтер Python
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        name: Ruff — линтер Python
+        args: [ --fix ]
+
+  # Форматирование Python
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        name: Black — форматирование кода
+        language_version: python3.12
+
+  # Поиск секретов
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: Поиск секретов в коде
+        args: [ '--baseline', '.secrets.baseline' ]

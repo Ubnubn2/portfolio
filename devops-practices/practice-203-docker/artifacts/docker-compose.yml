@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: linkshort_app
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: linkshort
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
+
+    depends_on:
+      - db
+      - cache
+
+    networks:
+      - backend
+
+  db:
+    image: postgres:16-alpine
+
+    container_name: linkshort_db
+
+    environment:
+      POSTGRES_DB: linkshort
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - backend
+
+  cache:
+    image: redis:7-alpine
+
+    container_name: linkshort_cache
+
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+    driver: bridge

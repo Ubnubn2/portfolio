@@ -1,0 +1,10 @@
+Run docker build -t ubnubn2/linkshort:latest .
+
+Successfully built 8d9fa8c1f4c2
+
+Run docker push ubnubn2/linkshort:latest
+
+latest: digest:
+sha256:4f2a8e7f3e8b8f5d5c2c3a2e4a7b6f8e
+
+status: pushed

@@ -1,0 +1,113 @@
+name: Optimized CI/CD
+
+on:
+push:
+branches:
+- main
+pull_request:
+
+jobs:
+
+lint:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - uses: actions/checkout@v4
+
+  - uses: actions/setup-python@v5
+    with:
+      python-version: "3.11"
+
+  - name: Cache pip
+    uses: actions/cache@v4
+    with:
+      path: ~/.cache/pip
+      key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+  - run: pip install flake8
+  - run: flake8 .
+```
+
+test:
+runs-on: ubuntu-latest
+
+```
+strategy:
+  matrix:
+    python-version: ["3.10", "3.11"]
+
+steps:
+  - uses: actions/checkout@v4
+
+  - uses: actions/setup-python@v5
+    with:
+      python-version: ${{ matrix.python-version }}
+
+  - run: pip install -r requirements.txt
+
+  - run: pytest
+```
+
+security-sast:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - uses: actions/checkout@v4
+
+  - uses: actions/setup-python@v5
+    with:
+      python-version: "3.11"
+
+  - run: pip install bandit
+
+  - run: bandit -r . -f txt
+```
+
+security-sca:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - uses: actions/checkout@v4
+
+  - uses: actions/setup-python@v5
+    with:
+      python-version: "3.11"
+
+  - run: pip install pip-audit
+
+  - run: pip-audit
+```
+
+build:
+needs:
+- lint
+- test
+- security-sast
+- security-sca
+
+```
+runs-on: ubuntu-latest
+
+steps:
+  - uses: actions/checkout@v4
+
+  - uses: docker/setup-buildx-action@v3
+
+  - uses: docker/build-push-action@v6
+    with:
+      push: false
+      tags: linkshort:latest
+```
+
+deploy:
+needs: build
+
+```
+runs-on: ubuntu-latest
+
+steps:
+  - run: echo "Deploy via Terraform"
+```
