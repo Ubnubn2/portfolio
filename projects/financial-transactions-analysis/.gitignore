@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+.venv
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Данные (не храним в репозитории)
+*.csv
+*.xlsx
+*.json
+*.db
+test_storage/
+data/
+postgres_data/
+
+# Docker
+.dockerignore

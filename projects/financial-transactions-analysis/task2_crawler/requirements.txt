@@ -1,0 +1,9 @@
+faker
+python-docx
+openpyxl
+fpdf2
+rarfile
+py7zr
+pandas
+pdfplumber
+psycopg2-binary

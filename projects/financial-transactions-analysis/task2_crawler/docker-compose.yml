@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-fts
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: search_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: crawler-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./test_storage:/app/test_storage
+      - ./data:/app/data
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: search_db
+      DB_USER: postgres
+      DB_PASSWORD: mysecretpassword
+
+volumes:
+  postgres_data:  
