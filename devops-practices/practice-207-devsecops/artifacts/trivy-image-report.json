@@ -1,6 +1,0 @@
-{
-  "SchemaVersion": 2,
-  "ArtifactName": "myapp:latest",
-  "ArtifactType": "container_image",
-  "Results": []
-}
